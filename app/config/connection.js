@@ -5,23 +5,17 @@ var connection;
 if (process.env.JAWSDB_URL) {
   connection = mysql.createConnection(process.env.JAWSDB_URL);
 } else {
-  connection = mysql.createConnection({
+  connection = new Sequelize("devour_db", "root", "root", {
     host: "localhost",
     port: 3306,
-    user: "root",
-    password: "root",
-    database: "devour_db"
+    dialect: "mysql",
+    pool: {
+      max: 5,
+      min: 0,
+      idle: 10000
+    }
   });
 }
-
-// Make connection.
-connection.connect(function (err) {
-  if (err) {
-    console.error("error connecting: " + err.stack);
-    return;
-  }
-  console.log("connected as id " + connection.threadId);
-});
 
 // Export connection for our ORM to use.
 module.exports = connection;
